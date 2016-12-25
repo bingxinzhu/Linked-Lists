@@ -1,0 +1,74 @@
+/*
+Given a circular linked list, implement an alogorithm that returns the node at the beginning of the loop.
+*/
+/*
+step1: detect if linked list has a loop. An easy way to detect  if a linked list has a loop is through the FastRunner/SlowRunner approach. They will eventually meet.
+step2: when do they collide?: We know that every p step that slower runner takes, FastRunner has taken 2p steps.
+Therefore, when SlowerRunner enters the looped portion after k steps, FasterRunner has taken 2k steps total and must be 2k - k steps, or k steps, into the loop. 
+Since k might be much larger than the loop length, we should write k as mod(k, LOOP_SIZE) steps, which we will denote as K.
+At each subsequent step, FastRunner and SlowRunner get either one step farther away or step closer, that is because we are in a circle, A moves q steps away from B is also moves q steps closer to B.
+So we know that:
+1. SlowRunner is 0 steps into the loop.
+2. FastRunner is K steps into the loop.
+3. SlowRunner is K steps behind FastRunner.
+4. FastRunner is LOOP_SIZE - K steps behind
+5. FastRunner catches up to SlowRunner at a rate of 1 step per unit of time.
+So when do they meet? If FastRunner is LOOP_SIZE - K steps behind SlowRunner, and FastRunner catches up at a rate of 1 step per unit of time, then they meet after LOOP_SIZE - K steps.
+At this point, they will be K steps before the heas of the loop. Let's call this point collisionSpot.
+        o - o - o - o \
+      k steps  		    \
+        			o -	0
+        		   /	  \
+        		  0       0 
+  n1 and n2        \	  /
+  will meet here--> 0 - 0
+(k steps)
+step3: how do you find the start of the loop?
+The collisionSpot and LinkedListHead are K nodes from the start of the loop. If we keep one pointer at CollisionSpot and move the other one to LinkedListHead, they will each be K nodes from the LoopStart. Moving the two pointers the same speed will cause them to collide again - this time after K steps. at which point they will both be at LoopStart. All we have tp dp os return this node.
+
+Summarize all:
+1. create two pointers, FastRunner and SlowRunner.
+2. Move FastRunner at a rate of 2 steps and SlowRunner at a rate of 1 step.
+3. When they collide, move SlowPointer to LinkedliistHead. Keep FastRunner where it is.
+4. Move SlowPointer and FastRunner at a rate of one step. Return new collision point.
+*/
+LinkedliistNode FindBeginning(LinkedliistNode head) {
+	LinkedlistNode slow = head;
+	LinkedListNode fast = head;
+
+	while(fast != null && fast.next != null) {
+		slow = slow.next;
+		fast = fast.next.next;
+		if(slow == fast) {  // collision
+			break;
+		}
+	}
+
+	if(fast == null || fast.next == null) {
+		return null;
+	}
+
+	slow = head;
+	while(slow != fast) {
+		slow = slow.next;
+		fast = fast.next;
+	}
+	return fast;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

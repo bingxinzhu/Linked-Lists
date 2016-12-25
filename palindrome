@@ -1,0 +1,46 @@
+/*
+  Implement a function to check if a linked list is a palindrome.
+
+  Thoughts:It is easy to think of reversing first and then compare two linked lists.
+  here provides another two ways.
+*/
+
+/*
+  Iterative approach which reversing the front half of the list(a stack can accomplish this)
+  If we don't know the size of the linked list, we can iterate through the linked list, using the fast runner/ slow runner
+  When the fast runner hits the end of the list, the slow runner will have reached the middle of the linked list.
+*/
+boolean isPanlidrome(LinkedListNode head) {
+	LinkedListNode fast = head;
+	LinkedListNode slow = head;
+
+	Stack<Integer> stack = new Stack<Integer>();
+	while(fast!=null && fast.next!=null) {
+		stack.push(slow.data);
+		slow = slow.next;
+		fast = fast.next.next;
+	}
+	// has odd number of elements so skip the middle element
+	if(fast != null) {
+		slow = slow.next;
+	}
+	while(slow != null) {
+		int top = stack.pop().intValue();
+
+		if(top != slow.data) {
+			return false;
+		}
+		slow = slow.next;
+	}
+	return true;
+}
+
+/*
+  Another way is to do it recursively,
+*/
+
+
+
+
+
+

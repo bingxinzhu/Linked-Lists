@@ -1,0 +1,61 @@
+/*
+  Implement an algorithm to find the kth to last element of a singly linked list.
+
+  thought: it is really simple when we know the size of the linked list, but if we don't know the size. Of course we can iterate first and know the size, but here provide a recursive way to do this.
+  */
+
+  int printkthToLast(linkedListNode head, int k) {
+  	if(head == null) {
+  		return 0;
+  	}
+  	int index = printkthToLast(head.next, k) + 1;
+  	if(index == k) {
+  		System.out.println(k + "th to last node is " + head.data);
+  	}
+  	return index;
+  }
+  // but here we want to pass a node rather than index, a good way to do is use wrap class
+
+  // updated version
+class Index {
+	public int value = 0;
+}
+linkedListNode kthToLast(linkedListNode head, int k) {
+	Index idex = new Index();
+	return kthToLast(head, k, idx);
+}
+linkedListNode node = kthToLast(linkedListNode head, int k, Index idx) {
+	if(head == null) {
+		return null;
+	}
+	linkedListNode node = kthToLast(head.next, k, idex);
+	idx.value = idx.value + 1;
+	if(idx.value == k) {
+		return head;
+	}
+	return node;
+}
+2
+
+
+
+  /*
+    another solution is using iterative way. We will have 2 pointers and place them k nodes apart in the linked list by putting p2 at the beginning and moving 
+    p1 k nodes in the list. Then, when we move them at the same pave, p1 will hit the end of the linked list after LENGTH - K steps.
+    At that point, p2 will be k nodes from the end.
+  */
+
+  linkedListNode nthToLast(linkedListNode head, int k) {
+  	linkedListNode p1 = head;
+  	linkedListNode p2 = head;
+  	for(int i = 0; i < k ; i++) {
+  		if(p1 == null) return null;
+  		p1 = p1.next;
+  	}
+
+  	while(p1 != null) {
+  		p1 = p1.next;
+  		p2 = p1.next;
+  	}
+  	return p2;
+  }
